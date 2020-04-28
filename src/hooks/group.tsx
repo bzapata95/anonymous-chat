@@ -21,7 +21,9 @@ const ChatProvider: React.FC = ({ children }) => {
     await db
       .collection('groups')
       .get()
+      // eslint-disable-next-line func-names
       .then(function (querySnapshot) {
+        // eslint-disable-next-line func-names
         querySnapshot.forEach(function (doc) {
           arrayGroup.push({ id: doc.id, category: doc.data().category });
           setGroup(arrayGroup);

@@ -3,13 +3,16 @@ import React from 'react';
 import { AuthProvider } from './auth';
 import { ChatProvider as GroupProvider } from './group';
 import { ChatProvider } from './chat';
+import { OneProvider } from './one';
 
 const AppProvider: React.FC = ({ children }) => (
-  <GroupProvider>
-    <ChatProvider>
-      <AuthProvider>{children}</AuthProvider>
-    </ChatProvider>
-  </GroupProvider>
+  <AuthProvider>
+    <GroupProvider>
+      <ChatProvider>
+        <OneProvider>{children}</OneProvider>
+      </ChatProvider>
+    </GroupProvider>
+  </AuthProvider>
 );
 
 export default AppProvider;

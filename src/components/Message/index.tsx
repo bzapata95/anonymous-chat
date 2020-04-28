@@ -1,10 +1,12 @@
 import React, { useCallback, useMemo } from 'react';
+import { isUuid } from 'uuidv4';
 import { useParams } from 'react-router-dom';
 import { FiXCircle } from 'react-icons/fi';
 import { shade } from 'polished';
 
 import { Message as IMessage, useChat } from '../../hooks/chat';
 import { useAuth } from '../../hooks/auth';
+import { useOne } from '../../hooks/one';
 
 import { Container } from './styles';
 
@@ -13,9 +15,10 @@ interface MessageProps {
 }
 
 const Message: React.FC<MessageProps> = ({ message }) => {
-  const { doc } = useParams();
+  const { room, doc } = useParams();
 
   const { deleteMessage } = useChat();
+  const { deleteMessage: deleteMessageOneToOne } = useOne();
   const { user } = useAuth();
 
   const handleDelete = useCallback(
@@ -25,10 +28,14 @@ const Message: React.FC<MessageProps> = ({ message }) => {
         '¿Estás seguro que quiere eliminar este mensaje?',
       );
       if (warn) {
-        deleteMessage(key, `${doc}`, user.id);
+        if (isUuid(`${room}`)) {
+          deleteMessageOneToOne(key, `${doc}`, user.id);
+        } else {
+          deleteMessage(key, `${room}`, user.id);
+        }
       }
     },
-    [deleteMessage, doc, user.id],
+    [deleteMessage, doc, user.id, deleteMessageOneToOne, room],
   );
 
   const isAuthor = useMemo(() => {

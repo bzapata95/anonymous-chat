@@ -53,16 +53,15 @@ const ChatProvider: React.FC = ({ children }) => {
   }, [messages]);
 
   const getMessagesForCategory = useCallback(async (category: string) => {
-    await db
-      .collection('groups')
-      .where('category', '==', `${category}`)
-      .get()
-      .then(function (querySnapshot) {
-        if (querySnapshot.docs) {
-          const data = querySnapshot.docs[0].data();
-          setMessages(data.messages);
-        }
-      });
+    const docRef = db.collection('groups').doc(`${category}`);
+
+    // eslint-disable-next-line func-names
+    await docRef.onSnapshot(function (doc) {
+      if (doc.exists) {
+        const data = doc.data();
+        setMessages(data?.messages);
+      }
+    });
   }, []);
 
   const sendMessage = useCallback(

@@ -1,27 +1,34 @@
 import React, { useCallback, useState } from 'react';
+import { isUuid } from 'uuidv4';
 import { useParams } from 'react-router-dom';
 
 import { useAuth } from '../../hooks/auth';
 import { useChat } from '../../hooks/chat';
+import { useOne } from '../../hooks/one';
 
 import { Container } from './styles';
 
 const FormSendMessage: React.FC = () => {
-  const { doc } = useParams();
+  const { room, doc } = useParams();
 
   const [isFocused, setIsFocused] = useState(false);
   const [input, setInput] = useState('');
 
   const { user } = useAuth();
   const { sendMessage } = useChat();
+  const { sendMessageOneToOne } = useOne();
 
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault();
-      await sendMessage(user, input, `${doc}`);
+      if (isUuid(`${room}`)) {
+        sendMessageOneToOne(input, `${doc}`);
+      } else {
+        await sendMessage(user, input, `${room}`);
+      }
       setInput('');
     },
-    [input, sendMessage, user, doc],
+    [input, sendMessage, user, room, sendMessageOneToOne, doc],
   );
 
   const handleInputFocus = useCallback(() => {

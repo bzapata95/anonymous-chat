@@ -4,31 +4,32 @@ import { FiPlus } from 'react-icons/fi';
 import CardChat from '../CardChat';
 
 import { GroupState } from '../../hooks/group';
+import { useAuth } from '../../hooks/auth';
 
 import { Container, ContainerGroupChats } from './styles';
 
-interface AsideProps {
+interface AsideOneToOneProps {
   urlPrefix: string;
   title: string;
   iconPlus?: boolean;
-  items: Array<GroupState>;
+  items: Array<GroupState | any>;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function searchingFor(term: string): any {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (x: any) => {
-    return x.category.includes(term) || !term;
+    return x.to.name.toLowerCase().includes(term.toLowerCase()) || !term;
   };
 }
 
-const AsideGroup: React.FC<AsideProps> = ({
+const AsideOneToOne: React.FC<AsideOneToOneProps> = ({
   urlPrefix,
   title,
   iconPlus,
   items,
 }) => {
   const [term, setTerm] = useState('');
+
+  const { user } = useAuth();
 
   return (
     <Container>
@@ -54,8 +55,15 @@ const AsideGroup: React.FC<AsideProps> = ({
       <ContainerGroupChats>
         {items &&
           items.filter(searchingFor(term)).map((item) => (
-            <CardChat key={item.id} url={`/${urlPrefix}/${item.id}`}>
-              <h1>{item.category.toUpperCase()}</h1>
+            <CardChat
+              key={item.key}
+              url={`/${urlPrefix}/${item.key}/${item.doc}`}
+            >
+              {item.from.id === user.id && item.to.id !== user.id ? (
+                <h1>{item.to.name.toUpperCase()}</h1>
+              ) : (
+                <h1>{item.from.name.toUpperCase()}</h1>
+              )}
             </CardChat>
           ))}
       </ContainerGroupChats>
@@ -63,4 +71,4 @@ const AsideGroup: React.FC<AsideProps> = ({
   );
 };
 
-export default AsideGroup;
+export default AsideOneToOne;

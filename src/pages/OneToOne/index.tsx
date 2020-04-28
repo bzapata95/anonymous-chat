@@ -2,44 +2,40 @@ import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
 
-import AsideGroup from '../../components/Aside';
+import AsideOneToOne from '../../components/AsideOneToOne';
 import ContainerMessages from '../../components/ContainerMessage';
 import FormSendMessage from '../../components/FormSendMessage';
-import ContainerUser from '../../components/ContainerUser';
 
-import { useGroup } from '../../hooks/group';
-import { useChat } from '../../hooks/chat';
+import { useOne } from '../../hooks/one';
 
 import { Container, Content, Main } from './styles';
 
-const Group: React.FC = () => {
-  const { room } = useParams();
-  const { group, loadGroups } = useGroup();
-  const { users, getMessagesForCategory, messages } = useChat();
+const OneToOne: React.FC = () => {
+  const { room, doc } = useParams();
+  const { chats, getMessageToRoom, loadChats, messages } = useOne();
 
   useEffect(() => {
-    room && getMessagesForCategory(`${room}`);
-  }, [room, getMessagesForCategory]);
+    room && getMessageToRoom(`${doc}`);
+  }, [room, getMessageToRoom, doc]);
 
   useEffect(() => {
-    loadGroups();
-  }, [loadGroups]);
+    loadChats();
+  }, [loadChats]);
 
   return (
     <Container>
       <header>
-        <h1>Chat grupales</h1>
+        <h1>Chat individuales</h1>
         <Link to="/dashboard">
           <FiArrowLeft size={20} color="#7159c1" />
           Volver al dashboard
         </Link>
       </header>
       <Content>
-        <AsideGroup
-          urlPrefix="group-chat"
-          title="categorias"
-          iconPlus
-          items={group}
+        <AsideOneToOne
+          urlPrefix="individual-chat"
+          title="Chats"
+          items={chats}
         />
         <Main>
           {room ? (
@@ -49,11 +45,9 @@ const Group: React.FC = () => {
             </>
           ) : null}
         </Main>
-
-        <ContainerUser items={users} />
       </Content>
     </Container>
   );
 };
 
-export default Group;
+export default OneToOne;
