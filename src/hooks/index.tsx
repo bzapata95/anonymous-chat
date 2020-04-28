@@ -7,11 +7,11 @@ import { OneProvider } from './one';
 
 const AppProvider: React.FC = ({ children }) => (
   <AuthProvider>
-    <GroupProvider>
-      <ChatProvider>
-        <OneProvider>{children}</OneProvider>
-      </ChatProvider>
-    </GroupProvider>
+    <OneProvider>
+      <GroupProvider>
+        <ChatProvider>{children}</ChatProvider>
+      </GroupProvider>
+    </OneProvider>
   </AuthProvider>
 );
 

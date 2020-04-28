@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { uuid } from 'uuidv4';
 import { FiSend } from 'react-icons/fi';
@@ -24,7 +24,7 @@ const ContainerUser: React.FC<ContainerUserProps> = ({ items }) => {
 
   const { room } = useParams();
   const { user } = useAuth();
-  const { registerRoom } = useOne();
+  const { registerRoom, chats, loadChats } = useOne();
 
   const hanldeSendPersonalMessage = useCallback(
     async (userTo: User) => {
@@ -38,6 +38,10 @@ const ContainerUser: React.FC<ContainerUserProps> = ({ items }) => {
     [user.id, registerRoom, user.name],
   );
 
+  useEffect(() => {
+    loadChats();
+  }, [loadChats]);
+
   const handleInputFocus = useCallback(() => {
     setIsFocused(true);
   }, []);
@@ -45,6 +49,10 @@ const ContainerUser: React.FC<ContainerUserProps> = ({ items }) => {
   const handleInputBlur = useCallback(() => {
     setIsFocused(false);
   }, []);
+
+  const stringArrayUserIdOfOneToOne = useMemo(() => {
+    return chats.map((chat) => chat.to.id);
+  }, [chats]);
 
   return (
     <Container isFocused={isFocused}>
@@ -67,7 +75,8 @@ const ContainerUser: React.FC<ContainerUserProps> = ({ items }) => {
               items.filter(searchingFor(term)).map((item) => (
                 <li key={item.id}>
                   {item.name}
-                  {item.id !== user.id ? (
+                  {item.id !== user.id &&
+                  !stringArrayUserIdOfOneToOne.includes(item.id) ? (
                     <FiSend
                       size={20}
                       color="#21e181"
