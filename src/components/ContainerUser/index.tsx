@@ -1,5 +1,5 @@
-import React, { useCallback } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import React, { useCallback, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { uuid } from 'uuidv4';
 import { FiSend } from 'react-icons/fi';
 
@@ -12,8 +12,15 @@ interface ContainerUserProps {
   items: Array<User | any>;
 }
 
+function searchingFor(term: string): any {
+  return (x: any) => {
+    return x.name.toLowerCase().includes(term.toLowerCase()) || !term;
+  };
+}
+
 const ContainerUser: React.FC<ContainerUserProps> = ({ items }) => {
-  const history = useHistory();
+  const [isFocused, setIsFocused] = useState(false);
+  const [term, setTerm] = useState('');
 
   const { room } = useParams();
   const { user } = useAuth();
@@ -26,31 +33,47 @@ const ContainerUser: React.FC<ContainerUserProps> = ({ items }) => {
       const key = uuid();
 
       await registerRoom({ from, to, key });
-
-      history.push(`/individual-chat/${key}`);
     },
 
-    [user.id, history, registerRoom, user.name],
+    [user.id, registerRoom, user.name],
   );
 
+  const handleInputFocus = useCallback(() => {
+    setIsFocused(true);
+  }, []);
+
+  const handleInputBlur = useCallback(() => {
+    setIsFocused(false);
+  }, []);
+
   return (
-    <Container>
+    <Container isFocused={isFocused}>
       {room && (
         <>
           <header>Usuarios</header>
 
+          <input
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
+            name="term"
+            value={term}
+            onChange={(e) => setTerm(e.target.value)}
+            placeholder="Buscar usuario"
+            autoComplete="off"
+          />
+
           <ul>
             {items &&
-              items.map((item) => (
+              items.filter(searchingFor(term)).map((item) => (
                 <li key={item.id}>
                   {item.name}
-                  {item.id !== user.id && (
+                  {item.id !== user.id ? (
                     <FiSend
                       size={20}
                       color="#21e181"
                       onClick={() => hanldeSendPersonalMessage(item)}
                     />
-                  )}
+                  ) : null}
                 </li>
               ))}
           </ul>

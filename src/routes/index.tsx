@@ -15,7 +15,7 @@ const Routes: React.FC = () => (
     <Route path="/group-chat/:room" exact component={Group} isPrivate />
     <Route path="/individual-chat" exact component={OneToOne} isPrivate />
     <Route
-      path="/individual-chat/:room/:doc"
+      path="/individual-chat/:room/:doc?"
       exact
       component={OneToOne}
       isPrivate

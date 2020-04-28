@@ -1,6 +1,10 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export const Container = styled.aside`
+interface ContainerProps {
+  isFocused: boolean;
+}
+
+export const Container = styled.aside<ContainerProps>`
   background: #19181f;
   padding: 24px;
 
@@ -37,6 +41,12 @@ export const Container = styled.aside`
       padding: 0 24px;
       color: #e5e5e5;
       font-size: 14px;
+
+      ${(props) =>
+        props.isFocused &&
+        css`
+          border-color: #7159c1;
+        `}
     }
   }
 `;
@@ -44,7 +54,8 @@ export const Container = styled.aside`
 export const ContainerGroupChats = styled.section`
   display: flex;
   flex-direction: column;
-  height: 550px;
+  height: 100%;
+  max-height: 650px;
 
   overflow-y: auto;
 `;

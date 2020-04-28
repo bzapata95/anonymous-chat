@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
 import { uuid } from 'uuidv4';
 import { db } from '../firebase';
 
@@ -11,11 +12,6 @@ interface RoomData {
   to: User;
   key: string;
   messages: Message[];
-}
-
-interface OneStateContent {
-  participants: string[];
-  messages: object[];
 }
 
 interface DTOCreate {
@@ -37,6 +33,7 @@ interface OneContextData {
 const OneContext = createContext<OneContextData>({} as OneContextData);
 
 const OneProvider: React.FC = ({ children }) => {
+  const history = useHistory();
   const [chats, setChats] = useState<RoomData[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const { user } = useAuth();
@@ -49,9 +46,8 @@ const OneProvider: React.FC = ({ children }) => {
       await db
         .collection('onetoone')
         .where('from.id', '==', `${user.id}`)
-        .get()
         // eslint-disable-next-line func-names
-        .then(function (querySnapshot) {
+        .onSnapshot(function (querySnapshot) {
           // eslint-disable-next-line func-names
           querySnapshot.forEach(function (doc) {
             arrayGroup1.push({
@@ -85,16 +81,24 @@ const OneProvider: React.FC = ({ children }) => {
     }
   }, [user]);
 
-  const registerRoom = useCallback(async ({ from, to, key }: DTOCreate) => {
-    const data = {
-      from,
-      to,
-      key,
-      messages: [],
-    };
+  const registerRoom = useCallback(
+    async ({ from, to, key }: DTOCreate) => {
+      const data = {
+        from,
+        to,
+        key,
+        messages: [],
+      };
 
-    db.collection('onetoone').add({ ...data });
-  }, []);
+      db.collection('onetoone')
+        .add({ ...data })
+        // eslint-disable-next-line func-names
+        .then(function (docRef) {
+          history.push(`/individual-chat/${key}/${docRef.id}`);
+        });
+    },
+    [history],
+  );
 
   const sendMessageOneToOne = useCallback(
     async (message: string, room: string) => {
@@ -123,7 +127,7 @@ const OneProvider: React.FC = ({ children }) => {
     const docRef = db.collection('onetoone').doc(`${docChat}`);
 
     // eslint-disable-next-line func-names
-    await docRef.get().then(function (doc) {
+    await docRef.onSnapshot(function (doc) {
       if (doc.exists) {
         const data = doc.data();
         setMessages(data?.messages);

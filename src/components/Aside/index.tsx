@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { FiPlus } from 'react-icons/fi';
 
 import CardChat from '../CardChat';
 
-import { GroupState } from '../../hooks/group';
+import { GroupState, useGroup } from '../../hooks/group';
 
 import { Container, ContainerGroupChats } from './styles';
 
@@ -14,11 +14,9 @@ interface AsideProps {
   items: Array<GroupState>;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function searchingFor(term: string): any {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (x: any) => {
-    return x.category.includes(term) || !term;
+    return x.category.toLowerCase().includes(term.toLowerCase()) || !term;
   };
 }
 
@@ -28,20 +26,42 @@ const AsideGroup: React.FC<AsideProps> = ({
   iconPlus,
   items,
 }) => {
+  const [isFocused, setIsFocused] = useState(false);
   const [term, setTerm] = useState('');
 
+  const { createGroup } = useGroup();
+
+  const hanldeAddGroup = useCallback(() => {
+    const name = prompt('¿Nombre del grupo?');
+    if (!name) {
+      alert('Debe ingresar un nombre');
+    } else {
+      createGroup(name);
+    }
+  }, [createGroup]);
+
+  const handleInputFocus = useCallback(() => {
+    setIsFocused(true);
+  }, []);
+
+  const handleInputBlur = useCallback(() => {
+    setIsFocused(false);
+  }, []);
+
   return (
-    <Container>
+    <Container isFocused={isFocused}>
       <div>
         <p>{title}</p>
         {iconPlus && (
           <div>
-            <FiPlus size={18} color="#e5e5e5" />
+            <FiPlus size={18} color="#e5e5e5" onClick={hanldeAddGroup} />
           </div>
         )}
       </div>
       <form>
         <input
+          onFocus={handleInputFocus}
+          onBlur={handleInputBlur}
           type="text"
           name="term"
           value={term}

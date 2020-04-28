@@ -10,11 +10,11 @@ import GlobalStyle from './styles/global';
 const App: React.FC = () => {
   return (
     <>
-      <AppProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <AppProvider>
           <Routes />
-        </BrowserRouter>
-      </AppProvider>
+        </AppProvider>
+      </BrowserRouter>
       <GlobalStyle />
     </>
   );
