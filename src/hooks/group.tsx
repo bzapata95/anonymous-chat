@@ -2,8 +2,6 @@ import React, { createContext, useContext, useState, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { db } from '../firebase';
 
-import { Message } from './chat';
-
 export interface GroupState {
   id: string;
   category: string;
@@ -29,6 +27,7 @@ const ChatProvider: React.FC = ({ children }) => {
           category: category.toLowerCase(),
           messages: [],
         })
+        // eslint-disable-next-line func-names
         .then(function (docRef) {
           history.push(`/group-chat/${docRef.id}`);
           setGroup((state) => [
