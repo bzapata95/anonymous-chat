@@ -2,7 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 
 const firebaseConfig = {
-  //YUOR CREDENTIALS
+  // YOUR CREDENTIALS
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
