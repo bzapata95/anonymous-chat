@@ -24,21 +24,21 @@ Anonymous chat
 
 ### Chat view
 
-1.Be able to send messages.
-2.Power to delete messages (You must hide only the person who deleted the message).
+1. Be able to send messages.
+2. Power to delete messages (You must hide only the person who deleted the message).
 
 ### STACK:
 
 **Required**
 
-1.React
-2.Styled components
+1. React
+2. Styled components
 
 **Desirable**
 
-1.Functional components
-2.React hooks
-3.Typescript
+1. Functional components
+2. React hooks
+3. Typescript
 
 <p align="center">
   <a href="https://opensource.org/licenses/MIT">
