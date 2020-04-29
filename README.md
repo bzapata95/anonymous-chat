@@ -1,6 +1,6 @@
 <h1 align="center">
 <br>
-  <img src=".github/logo.svg" alt="AnonymousChat" width="120">
+  <img src=".github/logo.svg" alt="AnonymousChat" width="300">
 <br>
 <br>
 Anonymous chat
@@ -10,7 +10,7 @@ Anonymous chat
 
 ## Description
 
-#### Requirements:
+### Requirements:
 
 🙌 Main menu
 
@@ -22,21 +22,23 @@ Anonymous chat
 6. Search engine for users or groups.
 7. Each user must be able to create group chats.
 
-#### Chat view
+### Chat view
 
 1.Be able to send messages.
 2.Power to delete messages (You must hide only the person who deleted the message).
 
-#### STACK:
+### STACK:
 
-1. Required
-  1.React
-  2.Styled components
+**Required**
 
-2. Desirable
-  1.Functional components
-  2.React hooks
-  3.Typescript
+1.React
+2.Styled components
+
+**Desirable**
+
+1.Functional components
+2.React hooks
+3.Typescript
 
 <p align="center">
   <a href="https://opensource.org/licenses/MIT">
@@ -45,7 +47,7 @@ Anonymous chat
 </p>
 
 [//]: # (Add your gifs/images here:)
-<div>
+<div align="center">
   <img src=".github/AnonymousChat.gif" alt="demo" height="425">
 </div>
 
