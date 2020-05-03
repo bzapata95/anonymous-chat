@@ -5,8 +5,19 @@
 <br>
 Anonymous chat
 </h1>
-
 <p align="center">An anonymous chat (group and private chat)</p>
+  
+<p align="center">
+  <a href="https://opensource.org/licenses/MIT">
+    <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License MIT">
+  </a>
+</p>
+
+[//]: # (Add your gifs/images here:)
+<div align="center">
+  <img src=".github/AnonymousChat.gif" alt="demo" height="425">
+</div>
+
 
 ## Description
 
@@ -39,17 +50,6 @@ Anonymous chat
 1. Functional components
 2. React hooks
 3. Typescript
-
-<p align="center">
-  <a href="https://opensource.org/licenses/MIT">
-    <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License MIT">
-  </a>
-</p>
-
-[//]: # (Add your gifs/images here:)
-<div align="center">
-  <img src=".github/AnonymousChat.gif" alt="demo" height="425">
-</div>
 
 <hr />
 
